@@ -22,7 +22,7 @@ const Chat = () => {
   const sampleQuestions = [
     { text: "Legal aspects that you should consider before buying a property?", icon: <GoLaw className="sample-question-icon" /> },
     { text: "What are my legal rights as an employee?", icon: <GoLaw className="sample-question-icon" /> },
-    { text: "How does the divorce process work?", icon: <GoLaw className="sample-question-icon" /> },
+    { text: "What rental protections laws are in place for apartments tenants in Santa Clara, CA?", icon: <GoLaw className="sample-question-icon" /> },
     { text: "What are my legal rights if I am arrested?", icon: <GoLaw className="sample-question-icon" /> }
   ];
 
