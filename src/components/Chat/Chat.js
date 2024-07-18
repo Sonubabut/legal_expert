@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { TextField, Button, CircularProgress, IconButton, Card, CardContent } from '@material-ui/core';
+import { TextField, Button, CircularProgress, IconButton, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import { IoSend, IoMic, IoCopy, IoClose, IoTrash } from 'react-icons/io5';
 import { GoLaw } from "react-icons/go";
 import ReactMarkdown from 'react-markdown';
@@ -15,6 +15,7 @@ const Chat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [file, setFile] = useState(null);
+  const [disclaimerOpen, setDisclaimerOpen] = useState(true);
   const inputRef = useRef(null);
   const chatHistoryRef = useRef(null);
   const recognitionRef = useRef(null);
@@ -136,8 +137,26 @@ const Chat = () => {
     }, 0);
   };
 
+  const handleCloseDisclaimer = () => {
+    setDisclaimerOpen(false);
+  };
+
   return (
     <div className="chat-container">
+      <Dialog open={disclaimerOpen} onClose={handleCloseDisclaimer}>
+        <DialogTitle>Disclaimer</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            By using this chat application, you agree to the terms and conditions. The information provided is for general informational purposes only and is not a substitute for professional legal advice.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDisclaimer} color="primary">
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <div className="sample-questions">
         {sampleQuestions.map((question, index) => (
           <Card key={index} className="sample-question-card" onClick={() => handleSampleQuestionClick(question.text)}>
