@@ -3,18 +3,21 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  max-width: 1100px;
+  max-width: 1000px;
   margin: auto;
   background-color: #fff;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   border-radius: 8px;
   overflow: hidden;
+  margin-top: 30px;
+  font-size: 13px;
 }
 
 .sample-questions {
   display: flex;
+  font-size: 14px;
   justify-content: center;
-  padding: 20px;
+  padding: 10px;
   gap: 10px; /* Adds spacing between cards */
 }
 
@@ -26,7 +29,7 @@
   margin: 0 5px;
   cursor: pointer;
   transition: transform 0.2s;
-  min-width: 200px; /* Maintain a minimum width for better layout */
+  min-width: 100px; /* Maintain a minimum width for better layout */
 }
 
 .sample-question-card:hover {
@@ -67,11 +70,13 @@
   padding: 10px;
   border-radius: 8px;
   position: relative;
-  max-width: 80%;
+  max-width: 100%;
 }
 
 .chat-message-text {
   margin-bottom: 5px;
+  margin-top: 10px;
+  
 }
 
 .chat-message-timestamp {
@@ -99,7 +104,8 @@
 .chat-input {
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
+  font-size: 10px;
   border-top: 1px solid #eee;
 }
 
@@ -121,22 +127,23 @@
     max-width: 100%;
     box-shadow: none;
     border-radius: 0;
-    height: 100vh; /* Make the chat container fill the viewport height */
+    font-size: 14px;
+    height: 87vh;
   }
 
   .sample-questions {
-    flex-wrap: nowrap; /* Prevent wrapping */
-    overflow-x: auto; /* Enable horizontal scrolling */
+    flex-wrap: nowrap;
+    overflow-x: auto;
     padding: 10px;
-    gap: 10px; /* Maintain gap between cards for better spacing */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling for touch devices */
+    gap: 10px;
+    -webkit-overflow-scrolling: touch;
   }
 
   .sample-question-card {
-    flex: 0 0 auto; /* Ensure the cards do not shrink or grow */
-    width: auto; /* Use auto width for horizontal scroll */
-    margin: 0; /* Reset margin for seamless scrolling */
-    min-width: 150px; /* Ensure a minimum width for better touch targets */
+    flex: 0 0 auto;
+    width: 180px;
+    margin: 0;
+    min-width: 100px;
   }
 
   .chat-history {
@@ -149,7 +156,7 @@
   }
 
   .chat-message-content {
-    max-width: calc(100% - 50px); /* Adjust based on avatar size */
+    max-width: calc(100% - 50px);
   }
 
   .chat-input {
