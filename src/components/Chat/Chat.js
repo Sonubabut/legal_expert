@@ -82,7 +82,6 @@ const Chat = () => {
         setInputValue(speechToText);
         setIsListening(false);
 
-        // Automatically trigger the handleSubmit function
         handleSubmit();
       };
 
