@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { TextField, Button, CircularProgress, IconButton, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import { IoSend, IoMic, IoCopy, IoClose, IoTrash } from 'react-icons/io5';
-import { GoLaw } from "react-icons/go";
 import ReactMarkdown from 'react-markdown';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { getAIResponse } from '../../utils';
+import annyang from 'annyang';
+import { GoLaw } from "react-icons/go";
 import './Chat.css';
 
 const Chat = () => {
@@ -13,12 +14,11 @@ const Chat = () => {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
-  const [isListening, setIsListening] = useState(false);
   const [file, setFile] = useState(null);
   const [disclaimerOpen, setDisclaimerOpen] = useState(true);
+  const [isListening, setIsListening] = useState(false);
   const inputRef = useRef(null);
   const chatHistoryRef = useRef(null);
-  const recognitionRef = useRef(null);
 
   const sampleQuestions = [
     { text: "Legal aspects that you should consider before buying a property?", icon: <GoLaw className="sample-question-icon" /> },
@@ -70,34 +70,6 @@ const Chat = () => {
     }
   }, [inputValue, file]);
 
-  useEffect(() => {
-    if ('webkitSpeechRecognition' in window) {
-      recognitionRef.current = new window.webkitSpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = 'en-US';
-
-      recognitionRef.current.onresult = (event) => {
-        const speechToText = event.results[0][0].transcript;
-        setInputValue(speechToText);
-        setIsListening(false);
-
-        handleSubmit();
-      };
-
-      recognitionRef.current.onerror = (event) => {
-        console.error("Speech recognition error:", event.error);
-        setIsListening(false);
-      };
-
-      recognitionRef.current.onend = () => {
-        setIsListening(false);
-      };
-    } else {
-      console.warn("Web Speech API is not supported in this browser.");
-    }
-  }, [handleSubmit]);
-
   const handleKeyPress = (event) => {
     if (event.key === "Enter" && !isSending) {
       handleSubmit(event);
@@ -108,23 +80,32 @@ const Chat = () => {
     setInputValue(event.target.value);
   };
 
-  const handleVoiceInput = async () => {
-    if (recognitionRef.current) {
+  useEffect(() => {
+    if (annyang) {
+      annyang.addCommands({
+        '*text': (text) => {
+          setInputValue(text);
+          handleSubmit();
+        }
+      });
+
+      annyang.addCallback('start', () => setIsListening(true));
+      annyang.addCallback('end', () => setIsListening(false));
+      annyang.addCallback('error', () => setIsListening(false));
+    }
+  }, [handleSubmit]);
+
+  const handleVoiceInput = () => {
+    if (annyang) {
       if (isListening) {
-        recognitionRef.current.stop();
+        annyang.abort();
         setIsListening(false);
       } else {
-        try {
-          await navigator.mediaDevices.getUserMedia({ audio: true });
-          recognitionRef.current.start();
-          setIsListening(true);
-        } catch (error) {
-          console.error("Microphone permission denied:", error);
-          alert("Microphone permission is required for voice input.");
-        }
+        annyang.start();
+        setIsListening(true);
       }
     } else {
-      console.warn("Web Speech API is not supported in this browser.");
+      console.warn("Annyang is not supported in this browser.");
     }
   };
 
@@ -255,9 +236,9 @@ const Chat = () => {
           style={{ display: 'none' }}
         />
         <label htmlFor="file-input">
-          <IconButton component="span">
-            {/* <IoCloudUpload /> */}
-          </IconButton>
+          {/* <IconButton component="span">
+            <IoCloudUpload />
+          </IconButton> */}
         </label>
         <Button
           className="chat-submit-button"
