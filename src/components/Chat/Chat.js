@@ -23,7 +23,7 @@ const Chat = () => {
   const sampleQuestions = [
     { text: "Legal aspects that you should consider before buying a property?", icon: <GoLaw className="sample-question-icon" /> },
     { text: "What are my legal rights as an employee?", icon: <GoLaw className="sample-question-icon" /> },
-    { text: "What rental protections laws are in place for apartments tenants in Santa Clara, CA?", icon: <GoLaw className="sample-question-icon" /> },
+    { text: "What rental protections laws in Santa Clara, CA?", icon: <GoLaw className="sample-question-icon" /> },
     { text: "What are my legal rights if I am arrested?", icon: <GoLaw className="sample-question-icon" /> }
   ];
 
@@ -103,14 +103,20 @@ const Chat = () => {
     setInputValue(event.target.value);
   };
 
-  const handleVoiceInput = () => {
+  const handleVoiceInput = async () => {
     if (recognitionRef.current) {
       if (isListening) {
         recognitionRef.current.stop();
         setIsListening(false);
       } else {
-        recognitionRef.current.start();
-        setIsListening(true);
+        try {
+          await navigator.mediaDevices.getUserMedia({ audio: true });
+          recognitionRef.current.start();
+          setIsListening(true);
+        } catch (error) {
+          console.error("Microphone permission denied:", error);
+          alert("Microphone permission is required for voice input.");
+        }
       }
     } else {
       console.warn("Web Speech API is not supported in this browser.");
@@ -244,9 +250,9 @@ const Chat = () => {
           style={{ display: 'none' }}
         />
         <label htmlFor="file-input">
-          {/* <IconButton component="span">
-            <IoCloudUpload />
-          </IconButton> */}
+          <IconButton component="span">
+            {/* <IoCloudUpload /> */}
+          </IconButton>
         </label>
         <Button
           className="chat-submit-button"
