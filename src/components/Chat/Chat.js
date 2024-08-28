@@ -166,8 +166,8 @@ const Chat = () => {
               <img
                 src={
                   message.role === "user"
-                    ? "https://test.digitalt3.com/wp-content/uploads/2024/06/legal_chat2.png"
-                    : "https://test.digitalt3.com/wp-content/uploads/2024/06/legal_exp.png"
+                    ? "https://digitalt3.com/wp-content/uploads/2024/08/legal_chat2.png"
+                    : "https://digitalt3.com/wp-content/uploads/2024/08/legal_exp.png"
                 }
                 alt={message.role}
                 width="40"
