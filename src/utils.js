@@ -7,7 +7,7 @@ export const API_URL = "https://vygi7zn5f2vxe3zf3n6jf2xeem0wywin.lambda-url.us-e
  */
 export const getAIResponse = async (question) => {
   try {
-    const response = await fetch(`${API_URL}/api/get-response`, {
+    const response = await fetch(`${API_URL}/fast/response`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
